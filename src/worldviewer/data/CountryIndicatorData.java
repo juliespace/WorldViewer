@@ -1,5 +1,7 @@
 package worldviewer.data;
 
+import java.util.Arrays;
+
 /**
  * 
  * yearly data for a given country / indicator
@@ -62,4 +64,13 @@ public class CountryIndicatorData {
 	public double[] getYearlyData() {
 		return yearlyData;
 	}
+
+	@Override
+	public String toString() {
+		return "CountryIndicatorData [countryName=" + countryName + ", countryCode=" + countryCode + ", indicatorName="
+				+ indicatorName + ", indicatorCode=" + indicatorCode + ", yearlyData=" + Arrays.toString(yearlyData)
+				+ "]";
+	}
+	
+	
 }
