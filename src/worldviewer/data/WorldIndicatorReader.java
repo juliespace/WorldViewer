@@ -5,14 +5,14 @@ import java.util.*;
 
 /**
  * 
- * to read country indicator data 
+ * to read country indicator data
  * 
  * @author huizhu, qingjin
  *
  */
 public class WorldIndicatorReader {
 	private final List<CountryIndicatorData> data;
-	
+
 	public WorldIndicatorReader(String inputFile) {
 		data = parseAll(inputFile);
 	}
@@ -26,14 +26,13 @@ public class WorldIndicatorReader {
 	public List<CountryIndicatorData> parseAll(String inputFile) {
 		ArrayList<CountryIndicatorData> data = new ArrayList<CountryIndicatorData>();
 		int lines = 0;
-		
-		try (FileInputStream fis = new FileInputStream(inputFile); 
-				Scanner scanner = new Scanner(fis)) {
+
+		try (FileInputStream fis = new FileInputStream(inputFile); Scanner scanner = new Scanner(fis)) {
 			while (scanner.hasNextLine()) {
 				data.add(parseLine(scanner.nextLine()));
 //				String line = scanner.nextLine();
 				lines++;
-				if (lines % 100 == 0)
+				if (lines % 1000 == 0)
 					System.out.printf("line count: %s\n", lines);
 			}
 		} catch (Exception e) {
@@ -41,7 +40,7 @@ public class WorldIndicatorReader {
 		}
 		return data;
 	}
-	
+
 	/**
 	 * 
 	 * parse a single line of data
@@ -59,9 +58,13 @@ public class WorldIndicatorReader {
 				yearly[i] = -1;
 			}
 		}
-		return new CountryIndicatorData(f[0], f[1], f[2], f[3], yearly);
+		return new CountryIndicatorData(strip(f[0]), strip(f[1]), strip(f[2]), strip(f[3]), yearly);
 	}
-	
+
+	public String strip(String word) {
+		return word.replace("\"", "");
+	}
+
 	/**
 	 * get data cached in memory
 	 * 
@@ -75,65 +78,69 @@ public class WorldIndicatorReader {
 	 * 
 	 * list countries in the world
 	 * 
-	 * @return a map of: country code -> country name 
+	 * @return a map of: country code -> country name
 	 */
 	public Map<String, String> listCountries() {
-		HashMap<String, String> countryMap = new HashMap<String, String> (); 
-		
+		HashMap<String, String> countryMap = new HashMap<String, String>();
+
 		for (CountryIndicatorData countryIndicatorData : data) {
 			if (!countryMap.containsKey(countryIndicatorData.getCountryCode()))
-				countryMap.put(countryIndicatorData.getCountryCode(), countryIndicatorData.getCountryName()); 
+				countryMap.put(countryIndicatorData.getCountryCode(), countryIndicatorData.getCountryName());
 		}
-		return countryMap; 
+		return countryMap;
 	}
-	
+
 	/**
 	 * 
 	 * list available indicators
 	 * 
-	 * @return a map of: indicator code -> indicator description 
+	 * @return a map of: indicator code -> indicator description
 	 */
 	public Map<String, String> listIndicators() {
-		HashMap<String, String> indicatorMap = new HashMap<String, String> ();
-		
+		HashMap<String, String> indicatorMap = new HashMap<String, String>();
+
 		for (CountryIndicatorData countryIndicatorData : data) {
 			if (!indicatorMap.containsKey(countryIndicatorData.getIndicatorCode()))
 				indicatorMap.put(countryIndicatorData.getIndicatorCode(), countryIndicatorData.getIndicatorName());
 		}
-		return indicatorMap; 
+		return indicatorMap;
 	}
-	
+
 	/**
 	 *
-	 *	filter data with specified indicator codes and country codes
+	 * filter data with specified indicator codes and country codes
 	 * 
-	 * @param countryCodes		a list of country codes
-	 * @param indicatorCodes	a list of indicator codes
-	 * @return a list of country indicator data filtered by indicator codes and country codes
+	 * @param countryCodes   a list of country codes
+	 * @param indicatorCodes a list of indicator codes
+	 * @return a list of country indicator data filtered by indicator codes and
+	 *         country codes
 	 */
 	public List<CountryIndicatorData> filterData(List<String> countryCodes, List<String> indicatorCodes) {
-		ArrayList<CountryIndicatorData> filteredCountries = new ArrayList<CountryIndicatorData>();
-		ArrayList<CountryIndicatorData> dataOfInterest = new ArrayList<CountryIndicatorData>();
-		
-		for (CountryIndicatorData countryIndicatorData : data) {
-			for (String countryCode: countryCodes) {
-				if (countryIndicatorData.getCountryCode().equals(countryCode))
-					filteredCountries.add(countryIndicatorData);
+
+		List<CountryIndicatorData> validData = new ArrayList<CountryIndicatorData>();
+
+		for (CountryIndicatorData eachData : data) {
+//			System.out.println("eachData: " + eachData);
+			for (String ccode : countryCodes) {
+//				System.out.printf("compare: %s %s %s\n", eachData.getCountryCode(), ccode,
+//						eachData.getCountryCode().equals(ccode));
+				if (eachData.getCountryCode().equals(ccode)) {
+//					System.out.println("country found: " + ccode);
+					for (String icode : indicatorCodes) {
+						if (eachData.getIndicatorCode().equals(icode)) {
+//							System.out.println("indicator found: " + icode);
+							validData.add(eachData);
+						}
+					}
+				}
 			}
 		}
-		
-		for (CountryIndicatorData countryIndicatorData: filteredCountries) {
-			for (String indicatorCode : indicatorCodes) {
-				if (countryIndicatorData.getIndicatorCode().equals(indicatorCode))
-					dataOfInterest.add(countryIndicatorData);
-			}
-		}
-		
-		return dataOfInterest;
+
+		return validData;
 	}
-	
+
 	/**
-	 * sample inputFile to generate a smaller test data file for testing 
+	 * sample inputFile to generate a smaller test data file for testing
 	 * 
 	 * @param inputFile
 	 * @param outputFile
@@ -141,10 +148,10 @@ public class WorldIndicatorReader {
 	 */
 	public static void sample(String inputFile, String outputFile, int perLines) {
 		int lines = 0;
-		
+
 		try (FileOutputStream fos = new FileOutputStream(outputFile);
 				PrintWriter pw = new PrintWriter(fos);
-				FileInputStream fis = new FileInputStream(inputFile); 
+				FileInputStream fis = new FileInputStream(inputFile);
 				Scanner scanner = new Scanner(fis)) {
 			while (scanner.hasNextLine()) {
 //				parseLine(scanner.nextLine());
@@ -152,7 +159,7 @@ public class WorldIndicatorReader {
 				lines++;
 				if (lines % 10000 == 0)
 					System.out.printf("line count: %s\n", lines);
-				int rand = (int)(Math.random() * perLines);
+				int rand = (int) (Math.random() * perLines);
 				if (rand == 1 || lines == 1)
 					pw.println(line);
 			}
@@ -162,17 +169,18 @@ public class WorldIndicatorReader {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main(String[] args) {
-		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall.csv");
-		System.out.println(newFile.listCountries());
-		System.out.println(newFile.listIndicators());
-		
-//		List<String> listOfC  = Arrays.asList("CYP", "CHN", "USA");
-		List<String> listOfI = Arrays.asList("SH.UHC.OOPC.25.TO", "EN.POP.EL5M.RU.ZS"); 
-		
-		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
-		
-		System.out.println(newFile.filterData(listOfC, listOfI));
-	}
+
+//	public static void main(String[] args) {
+//		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall.csv");
+//
+//		System.out.println(newFile.listCountries());
+//		System.out.println(newFile.listIndicators());
+//
+//		List<String> listOfC = Arrays.asList("ARB", "CYP", "CHN", "USA");
+//		List<String> listOfI = Arrays.asList("NE.GDI.STKB.CN", "SH.UHC.OOPC.25.TO", "EN.POP.EL5M.RU.ZS");
+//
+////		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
+//
+//		System.out.println(newFile.filterData(listOfC, listOfI));
+//	}
 }
