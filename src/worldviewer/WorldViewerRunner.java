@@ -1,12 +1,13 @@
 package worldviewer;
 
 public class WorldViewerRunner {
-
-
+	
+	/**
+	 * Launch the application 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+        WorldViewerUI.launch(args);
 	}
 	
-
 }

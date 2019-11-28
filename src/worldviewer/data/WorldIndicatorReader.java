@@ -170,17 +170,17 @@ public class WorldIndicatorReader {
 		}
 	}
 
-//	public static void main(String[] args) {
-//		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall.csv");
-//
-//		System.out.println(newFile.listCountries());
-//		System.out.println(newFile.listIndicators());
-//
-//		List<String> listOfC = Arrays.asList("ARB", "CYP", "CHN", "USA");
-//		List<String> listOfI = Arrays.asList("NE.GDI.STKB.CN", "SH.UHC.OOPC.25.TO", "EN.POP.EL5M.RU.ZS");
-//
-////		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
-//
-//		System.out.println(newFile.filterData(listOfC, listOfI));
-//	}
+	public static void main(String[] args) {
+		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall.csv");
+
+		System.out.println(newFile.listCountries());
+		System.out.println(newFile.listIndicators());
+
+		List<String> listOfC = Arrays.asList("NZL");
+		List<String> listOfI = Arrays.asList("NE.CON.PRVT.PC.KD.ZG");
+
+//		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
+
+		System.out.println(newFile.filterData(listOfC, listOfI));
+	}
 }
