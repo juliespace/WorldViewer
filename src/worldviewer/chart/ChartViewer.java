@@ -1,10 +1,12 @@
 package worldviewer.chart;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart.*;
-import worldviewer.WorldViwerSelector;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
@@ -66,9 +68,9 @@ public abstract class ChartViewer {
 		
 		for (CountryIndicatorData eachData: DataBank.getValidData()) {
 			
-			for (int i = 0; i < WorldViwerSelector.selectedIndicators().size(); i++) {
+			for (int i = 0; i < DataBank.getListOfSelectedIndicators().size(); i++) {
 				
-				if (eachData.getIndicatorCode().equals(WorldViwerSelector.selectedIndicators().get(i)) && eachData.getCountryCode().equals(countryCode)) {
+				if (eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(i)) && eachData.getCountryCode().equals(countryCode)) {
 					series.getData().add(new XYChart.Data(i, eachData.getYearlyData()[year])); 
 				}
 			}
@@ -89,28 +91,59 @@ public abstract class ChartViewer {
 	 * @param year
 	 * @return
 	 */
-	public Series<Number, Number> newNNChart(String countryCode, int year){
+	public Series<Number, Number> newNNSeries(String countryCode, int year){
 		Series<Number, Number> series = new Series<Number, Number>();
 		series.setName(DataBank.getCountryMap().get(countryCode));
 		
-		String [] threeIndicators = new String[] {WorldViwerSelector.selectedIndicators().get(0), WorldViwerSelector.selectedIndicators().get(1), WorldViwerSelector.selectedIndicators().get(2)};
+		System.out.printf("country: %s, year: %s\n", countryCode, year);
+		
+		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();
 		double x = 0; 
 		double y = 0; 
 		
 		for (CountryIndicatorData eachData: DataBank.getValidData()) {			
 			if (eachData.getCountryCode().equals(countryCode)) {
-				if (eachData.getIndicatorCode().equals(threeIndicators[0]))
-					x = eachData.getYearlyData()[year]; 
-				else if (eachData.getIndicatorCode().equals(threeIndicators[1]))
-					y = eachData.getYearlyData()[year]; 
+				if (eachData.getIndicatorCode().equals(threeIndicators.get(0)))
+					x = eachData.getYearlyData()[year - 1960]; 
+				else if (eachData.getIndicatorCode().equals(threeIndicators.get(1)))
+					y = eachData.getYearlyData()[year - 1960]; 
 			}	
 		}
 		
-		series.getData().add(new XYChart.Data<Number, Number>(x, y)); 
+		System.out.printf("x: %s, y: %s\n", x, y);
+		
+		if (x > 0 && y > 0)
+			series.getData().add(new XYChart.Data<Number, Number>(x, y, 1000000)); 
 		
 		return series; 
 	}
 	
+	/**
+	 * The function is for creating series of chart type with String, Number as x-axis and y-axis
+	 * x-axis represents the country and y-axis represents the indicator
+	 * 
+	 * @param countryCode
+	 * @param year
+	 * @return
+	 */
+	public Series<String, Number> newSNSeries(String countryCode, int year){
+		Series<String, Number> series = new Series<String, Number>(); 
+		series.setName(DataBank.getCountryMap().get(countryCode));
+		
+		CountryIndicatorData dataOfInterest = DataBank.getValidData().get(0); 
+		
+		for (CountryIndicatorData eachData: DataBank.getValidData()) {
+			if (eachData.getCountryCode().equals(countryCode)) {
+				dataOfInterest = eachData; 
+				break; 
+			}
+		}
+		
+		if (dataOfInterest.getYearlyData()[year - 1960] > 0)
+			series.getData().add(new XYChart.Data<String, Number>(dataOfInterest.getCountryName(), dataOfInterest.getYearlyData()[year - 1960]));
+		
+		return series; 
+	}
 	
 	/**
 	 * An abstract method
@@ -130,7 +163,7 @@ public abstract class ChartViewer {
 	public void updateLineChart(int year) {
 		List<Series<Number, Number>> serieses = new ArrayList<Series<Number, Number>>();
 		
-		for (String eachCountry: WorldViwerSelector.selectedCountries()) {
+		for (String eachCountry: DataBank.getListOfSelectedCountries()) {
 			serieses.add(newLineSeries(eachCountry, year));
 		}
 		
@@ -140,19 +173,49 @@ public abstract class ChartViewer {
 	
 	/**
 	 * This method is for updating data for all countries in NN chart 
-	 * It calls newNNChart function
+	 * It calls newNNSeries function
 	 * 
 	 * @param year
 	 */
 	public void updateNNChart(int year) {
 		List<Series<Number, Number>> serieses = new ArrayList<Series<Number, Number>>();
 		
-		for (String eachCountry: WorldViwerSelector.selectedCountries()) {
-			serieses.add(newNNChart(eachCountry, year)); 
+		for (String eachCountry: DataBank.getListOfSelectedCountries()) {
+			serieses.add(newNNSeries(eachCountry, year)); 
 		}
 		
 		getXYChart().getData().setAll(serieses); 
 	}
 	
+	
+	/**
+	 * This method is for updating data for all countries in SN chart 
+	 * It calls newSNSeries function
+	 * @param year
+	 */
+	public void updateSNChart(int year) {
+		List<Series<String, Number>> serieses = new ArrayList<Series<String, Number>>();
+		
+		for (String eachCountry: DataBank.getListOfSelectedCountries()) {
+			serieses.add(newSNSeries(eachCountry, year)); 
+		}
+		
+		getXYChart().getData().setAll(serieses); 
+	}
+	
+	
+	/**
+	 * This method is for adding and updating data for all countries in Pie Chart
+	 * @param year
+	 */
+	void updatePieChart(int year) {
+		List<PieChart.Data> groups = new ArrayList<>();
+		for (CountryIndicatorData eachData: DataBank.getValidData()) {
+			if (eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) {
+				groups.add(new PieChart.Data(eachData.getCountryName(), eachData.getYearlyData()[year - 1960])); 
+			}
+		}
+		((PieChart) chart).getData().setAll(groups);
+	}
 
 }

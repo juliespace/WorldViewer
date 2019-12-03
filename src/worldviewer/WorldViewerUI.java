@@ -128,8 +128,11 @@ public class WorldViewerUI extends Application {
 	 */
 	public void onNextFrame(ActionEvent event) {
 		if (isPlaying()) {
-			int year = (int) (slider.getValue() + 1) % DataBank.COUNT;
+			int year = (int) slider.getValue() + 1;
+			if (year > 2019) 
+				year = 1960; 
 			slider.setValue(year);
+			System.out.println("year " + year);
 			for (ChartViewer eachChartViewer: charts) {
 				eachChartViewer.updateChart(year); 
 			}

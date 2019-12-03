@@ -77,7 +77,7 @@ public class BubbleChartViewer extends ChartViewer {
 	public double findMax(double[] array) {
 		double max = array[0]; 
 		
-		for (int i = 0; i < array.length; i++) {
+		for (int i = 1; i < array.length; i++) {
 			if (array[i] > max) 
 				max = array[i]; 
 		}
@@ -91,7 +91,7 @@ public class BubbleChartViewer extends ChartViewer {
 	 * @return
 	 */
 	public double findMin(double[] array) {
-		double min = 100; 
+		double min = Double.MAX_VALUE; 
 		
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] != -1 && array[i] < min) 

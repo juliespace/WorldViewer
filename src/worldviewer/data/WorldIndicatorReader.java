@@ -54,7 +54,7 @@ public class WorldIndicatorReader {
 		String[] f = line.split("\"");
 		
 		int j = 9; 
-		double[] yearly = new double[59];
+		double[] yearly = new double[60];
 		for (int i = 0; i < yearly.length; i++) {
 			try {
 				yearly[i] = Double.valueOf(f[j]);
@@ -177,7 +177,7 @@ public class WorldIndicatorReader {
 	}
 
 	public static void main(String[] args) {
-		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall.csv");
+		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall2.csv");
 
 		System.out.println(newFile.listCountries());
 		System.out.println(newFile.listIndicators());
