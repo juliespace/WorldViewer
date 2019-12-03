@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -27,10 +28,10 @@ import worldviewer.data.DataBank;
  *
  */
 public class WorldViewerUI extends Application {
+	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer()}; 
-	
+	private final ChartViewer[] charts = {new BubbleChartViewer()}; //, new LineChartViewer()}; 
 	
 	/**
 	 * Create a new slider
@@ -141,7 +142,7 @@ public class WorldViewerUI extends Application {
 	 * @return
 	 */
 	public Scene newScene() {
-		VBox vbox = new VBox(newControlPane(), newChartPane()); 
+		VBox vbox = new VBox(menuBar, newControlPane(), newChartPane()); 
 		return new Scene(vbox); 
 	}
 
@@ -170,5 +171,13 @@ public class WorldViewerUI extends Application {
 		tile.setPrefColumns(3);
 		tile.setStyle("-fx-background-color: DAE6F3;");
 		return tile;
+	}
+	
+	/**
+	 * Launch the application 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+        launch(args);
 	}
 }

@@ -1,8 +1,11 @@
 package worldviewer.chart;
 
-import java.util.*;
-import javafx.scene.chart.*;
-import worldviewer.WorldViwerSelector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javafx.scene.chart.BubbleChart;
+import javafx.scene.chart.NumberAxis;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
@@ -21,18 +24,18 @@ public class BubbleChartViewer extends ChartViewer {
 	 */
 	@Override
 	public BubbleChart<Number, Number> newChart() {
-		String [] threeIndicators = new String[] {WorldViwerSelector.selectedIndicators().get(0), WorldViwerSelector.selectedIndicators().get(1), WorldViwerSelector.selectedIndicators().get(2)};
+		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();
 		List<Double> xMaxes = new ArrayList<Double>();
 		List<Double> xMins = new ArrayList<Double>(); 
 		List<Double> yMaxes = new ArrayList<Double>(); 
 		List<Double> yMins = new ArrayList<Double>(); 
 		
 		for (CountryIndicatorData eachData: DataBank.getValidData()) {
-			if (eachData.getIndicatorCode().equals(threeIndicators[0])) {
+			if (eachData.getIndicatorCode().equals(threeIndicators.get(0))) {
 				xMaxes.add(findMax(eachData.getYearlyData())); 
 				xMins.add(findMin(eachData.getYearlyData())); 
 			}
-			else if (eachData.getIndicatorCode().equals(threeIndicators[1])) {
+			else if (eachData.getIndicatorCode().equals(threeIndicators.get(1))) {
 				yMaxes.add(findMax(eachData.getYearlyData())); 
 				yMins.add(findMin(eachData.getYearlyData())); 
 			}
@@ -46,8 +49,8 @@ public class BubbleChartViewer extends ChartViewer {
 		final NumberAxis yAxis = new NumberAxis(yMin, yMax, yMax - yMin); 
 		
 		final BubbleChart<Number, Number> bubbleChart = new BubbleChart<Number, Number>(xAxis, yAxis); 
-		xAxis.setLabel(DataBank.getIndicatorMap().get(threeIndicators[0]));
-		yAxis.setLabel(DataBank.getIndicatorMap().get(threeIndicators[1]));
+		xAxis.setLabel(DataBank.getIndicatorMap().get(threeIndicators.get(0)));
+		yAxis.setLabel(DataBank.getIndicatorMap().get(threeIndicators.get(1)));
 		
 		bubbleChart.setTitle("Bubble Chart");
 		bubbleChart.setAnimated(false);

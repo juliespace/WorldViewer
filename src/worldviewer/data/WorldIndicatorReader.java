@@ -48,22 +48,28 @@ public class WorldIndicatorReader {
 	 * @param line
 	 * @return
 	 */
+	
+	
 	public CountryIndicatorData parseLine(String line) {
-		String[] f = line.split(",");
-		double[] yearly = new double[f.length - 4];
+		String[] f = line.split("\"");
+		
+		int j = 9; 
+		double[] yearly = new double[59];
 		for (int i = 0; i < yearly.length; i++) {
 			try {
-				yearly[i] = Double.valueOf(f[i + 4]);
+				yearly[i] = Double.valueOf(f[j]);
 			} catch (Exception e) {
 				yearly[i] = -1;
 			}
+			j += 2; 
 		}
-		return new CountryIndicatorData(strip(f[0]), strip(f[1]), strip(f[2]), strip(f[3]), yearly);
+		
+		return new CountryIndicatorData(f[1], f[3], f[5], f[7], yearly);
 	}
 
-	public String strip(String word) {
-		return word.replace("\"", "");
-	}
+//	public String strip(String word) {
+//		return word.replace("\"", "");
+//	}
 
 	/**
 	 * get data cached in memory
