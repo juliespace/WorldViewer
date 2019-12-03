@@ -31,7 +31,8 @@ public class WorldViewerUI extends Application {
 	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	private final ChartViewer[] charts = {new BubbleChartViewer()}; //, new LineChartViewer()}; 
+	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer()};
+	private static int year; 
 	
 	/**
 	 * Create a new slider
@@ -128,7 +129,7 @@ public class WorldViewerUI extends Application {
 	 */
 	public void onNextFrame(ActionEvent event) {
 		if (isPlaying()) {
-			int year = (int) slider.getValue() + 1;
+			year = (int) slider.getValue() + 1;
 			if (year > 2019) 
 				year = 1960; 
 			slider.setValue(year);
@@ -140,6 +141,11 @@ public class WorldViewerUI extends Application {
 	}
 	
 	
+	public static int getYear() {
+		return year;
+	}
+
+
 	/**
 	 * Provide a scene for display with control pane on top and chart pane on bottom
 	 * @return
