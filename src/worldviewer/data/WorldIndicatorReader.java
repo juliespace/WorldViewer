@@ -179,14 +179,14 @@ public class WorldIndicatorReader {
 	public static void main(String[] args) {
 		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall2.csv");
 
-		System.out.println(newFile.listCountries());
-		System.out.println(newFile.listIndicators());
-
-		List<String> listOfC = Arrays.asList("NZL");
-		List<String> listOfI = Arrays.asList("NE.CON.PRVT.PC.KD.ZG");
-
-//		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
-
-		System.out.println(newFile.filterData(listOfC, listOfI));
+//		System.out.println(newFile.listCountries());
+//		System.out.println(newFile.listIndicators());
+//
+//		List<String> listOfC = Arrays.asList("NZL");
+//		List<String> listOfI = Arrays.asList("NE.CON.PRVT.PC.KD.ZG");
+//
+////		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
+//
+//		System.out.println(newFile.filterData(listOfC, listOfI));
 	}
 }
