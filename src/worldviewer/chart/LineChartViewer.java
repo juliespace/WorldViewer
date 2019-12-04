@@ -28,7 +28,9 @@ public class LineChartViewer extends ChartViewer {
 		double yMax = Collections.max(yMaxes);
 		double yMin = Collections.min(yMins);
 		
-		final NumberAxis xAxis = new NumberAxis(WorldViewerUI.getYear(), WorldViewerUI.getYear() + 9, 1);
+		//final NumberAxis xAxis = new NumberAxis(WorldViewerUI.getYear(), WorldViewerUI.getYear() + 9, 9);
+		final NumberAxis xAxis = new NumberAxis(1960, 2019, 59);
+		
 		final NumberAxis yAxis = new NumberAxis(yMin, yMax, yMax - yMin);
 		
         final LineChart<Number,Number> lineChart = 
@@ -43,6 +45,9 @@ public class LineChartViewer extends ChartViewer {
 	@Override
 	public void updateChart(int year) {
 		super.updateLineChart(year);
+		NumberAxis axis = (NumberAxis) super.getXYChart().getXAxis();
+		axis.setLowerBound(WorldViewerUI.getYear());
+		axis.setUpperBound(WorldViewerUI.getYear()+9);
 	}
 
 }

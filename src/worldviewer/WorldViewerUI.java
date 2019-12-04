@@ -34,7 +34,7 @@ public class WorldViewerUI extends Application {
 	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	//private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer()};
+	//private final ChartViewer[] charts = {new LineChartViewer()};
 	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer(), new PieChartViewer(), new BarChartViewer(), new ScatterChartViewer()};
 	private static int year; 
 	

@@ -24,9 +24,9 @@ import javafx.stage.Stage;
  */
 public class WorldViwerSelector {
 	
-	static List<String> listOfSelectedCountries = new ArrayList<String>();
-	static List<String> listOfSelectedIndicators = new ArrayList<String>();
-	static List<String> listOfSelectedCharts = new ArrayList<String>();
+	static List<String> listOfSelectedCountries = new ArrayList<String>(Arrays.asList("China"));
+	static List<String> listOfSelectedIndicators = new ArrayList<String>(Arrays.asList("Economy","Education"));
+	static List<String> listOfSelectedCharts = new ArrayList<String>(Arrays.asList("Pie Chart"));
 	
 	static Menu countryMenu = new Menu("Country");
 	static Menu indicatorMenu = new Menu("Indicator");
@@ -123,6 +123,8 @@ public class WorldViwerSelector {
 				}
 	    	};
 	    	countryCheckBox.setOnAction(handler);
+	    	if (listOfSelectedCountries.contains(countryName))
+	    		countryCheckBox.setSelected(true);
 			countryMenuItem.setHideOnClick(false);
 		}
 	}
@@ -146,6 +148,8 @@ public class WorldViwerSelector {
 				}
 	    	};
 	    	indicatorCheckBox.setOnAction(handler);
+	    	if (listOfSelectedIndicators.contains(indicatorName))
+	    		indicatorCheckBox.setSelected(true);
 			indicatorMenuItem.setHideOnClick(false);
 		}
 	}
@@ -169,6 +173,8 @@ public class WorldViwerSelector {
 				}
 	    	};
 	    	chartCheckBox.setOnAction(handler);
+	    	if (listOfSelectedCharts.contains(chartName))
+	    		chartCheckBox.setSelected(true);
 			chartMenuItem.setHideOnClick(false);
 		}
 	}
@@ -186,6 +192,8 @@ public class WorldViwerSelector {
 		menuBar.getMenus().add(countryMenu);
 		menuBar.getMenus().add(indicatorMenu);
 		menuBar.getMenus().add(chartMenu);
+		
+		printStatus();
 	}
 	
 	/**

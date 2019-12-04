@@ -68,18 +68,24 @@ public abstract class ChartViewer {
 		int x = 0;
 		
 		for (CountryIndicatorData eachData : DataBank.getValidData()) {
-			if (eachData.getCountryCode().equals(countryCode) && eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) 
+			if (eachData.getCountryCode().equals(countryCode) && eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) {
 				dataOfInterest = eachData; 
 			
-			for (int i = 0; i < 10; i++) {
-				x = (year + i) % 2019 + ((year + i) / 2019) * 1959; 
-				
-				if (dataOfInterest.getYearlyData()[x - 1960] > 0)
-					series.getData().add(new XYChart.Data<Number, Number>(x, dataOfInterest.getYearlyData()[x - 1960])); 
+				for (int i = 0; i < 10; i++) {
+					if ((year + i) > 2019) {
+						x = year + i - 2019 + 1959;
+					}
+					else {
+						x = year + i; 
+					}
+					
+					if (dataOfInterest.getYearlyData()[x - 1960] > 0)
+						series.getData().add(new XYChart.Data<Number, Number>(x, dataOfInterest.getYearlyData()[x - 1960])); 
+
+				}
+				break;
 			}
-			break;
 		}
-	
 		return series;
 	}
 
@@ -137,7 +143,7 @@ public abstract class ChartViewer {
 		CountryIndicatorData dataOfInterest = DataBank.getValidData().get(0);
 
 		for (CountryIndicatorData eachData : DataBank.getValidData()) {
-			if (eachData.getCountryCode().equals(countryCode)) {
+			if (eachData.getCountryCode().equals(countryCode) && eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) {
 				dataOfInterest = eachData;
 				break;
 			}
