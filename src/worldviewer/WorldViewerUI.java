@@ -19,6 +19,9 @@ import javafx.util.Duration;
 import worldviewer.chart.BubbleChartViewer;
 import worldviewer.chart.ChartViewer;
 import worldviewer.chart.LineChartViewer;
+import worldviewer.chart.PieChartViewer;
+import worldviewer.chart.ScatterChartViewer;
+import worldviewer.chart.BarChartViewer;
 import worldviewer.data.DataBank;
 
 /**
@@ -31,7 +34,8 @@ public class WorldViewerUI extends Application {
 	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer()};
+	//private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer()};
+	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer(), new PieChartViewer(), new BarChartViewer(), new ScatterChartViewer()};
 	private static int year; 
 	
 	/**
