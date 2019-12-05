@@ -36,7 +36,7 @@ public class LineChartViewer extends ChartViewer {
 		
 		final NumberAxis xAxis = new NumberAxis();
 		xAxis.setAutoRanging(false);
-		final NumberAxis yAxis = new NumberAxis((int)yMin, (int)yMax, (int)(yMax - yMin) / 5);		
+		final NumberAxis yAxis = new NumberAxis((long)yMin, (long)yMax, (long)(yMax - yMin) / 5);		
         final LineChart<Number,Number> lineChart = 
                 new LineChart<Number,Number>(xAxis,yAxis);
                 

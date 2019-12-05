@@ -176,8 +176,8 @@ public class WorldIndicatorReader {
 		}
 	}
 
-	public static void main(String[] args) {
-		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall2.csv");
+//	public static void main(String[] args) {
+//		WorldIndicatorReader newFile = new WorldIndicatorReader("WDIDataSmall2.csv");
 
 //		System.out.println(newFile.listCountries());
 //		System.out.println(newFile.listIndicators());
@@ -188,5 +188,5 @@ public class WorldIndicatorReader {
 ////		List<String> listOfC = new ArrayList<>(newFile.listCountries().keySet());
 //
 //		System.out.println(newFile.filterData(listOfC, listOfI));
-	}
+//	}
 }

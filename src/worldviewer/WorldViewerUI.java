@@ -6,14 +6,18 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import worldviewer.chart.BarChartViewer;
@@ -34,9 +38,10 @@ public class WorldViewerUI extends Application {
 	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	//private final ChartViewer[] charts = {new LineChartViewer()};
 	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer(), new PieChartViewer(), new BarChartViewer(), new ScatterChartViewer()};
 	private static int year; 
+	private final Label yearLabel = newLabel(); 
+	private final Label titleLabel = newLabel(); 
 	
 	/**
 	 * Create a new slider
@@ -49,11 +54,20 @@ public class WorldViewerUI extends Application {
     	slider.setMajorTickUnit(50);
     	slider.setMinorTickCount(5);
     	slider.setBlockIncrement(10);
+//    	slider.resize(40, 10);
     	return slider; 
    	}
     
     
-    /**
+    public Label newLabel() {
+    	Label yearLabel = new Label();
+    	yearLabel.setFont(Font.font("American Typewriter", 16));
+    	
+    	return yearLabel;
+	}
+
+
+	/**
      * Create a new button with the text "Stop"
      * @return
      */
@@ -137,7 +151,8 @@ public class WorldViewerUI extends Application {
 			if (year > 2019) 
 				year = 1960; 
 			slider.setValue(year);
-			System.out.println("year " + year);
+			yearLabel.setText("Now shows the year of " +Integer.toString(year));
+//			System.out.println("year: " + year);
 			for (ChartViewer eachChartViewer: charts) {
 				eachChartViewer.updateChart(year); 
 			}
@@ -155,17 +170,34 @@ public class WorldViewerUI extends Application {
 	 * @return
 	 */
 	public Scene newScene() {
-		VBox vbox = new VBox(menuBar, newControlPane(), newChartPane()); 
+
+		VBox vbox = new VBox(titlePane(), newControlPane(), newChartPane()); 
 		return new Scene(vbox); 
 	}
 
 	
+	public Pane titlePane() {
+		titleLabel.setText("World Indicator Viewer");
+		titleLabel.setFont(Font.font("American Typewriter", 28));
+	
+		HBox newBox = new HBox(titleLabel); 
+		newBox.setAlignment(Pos.CENTER);
+		return newBox; 
+	}
 	/**
 	 * Create a new Control Pane with slider and playButton 
 	 * @return
 	 */
 	public Pane newControlPane() {
-		return new HBox(slider, playButton);
+		Label space1 = new Label(); 
+		space1.setPrefWidth(30);
+		Label space2 = new Label(); 
+		space2.setPrefWidth(80);
+		Label space3 = new Label(); 
+		space3.setPrefWidth(80);
+		HBox newBox = new HBox(menuBar,space3, slider, space1, playButton, space2, yearLabel); 
+		newBox.setAlignment(Pos.CENTER);
+		return newBox;
 	}
 
 	
@@ -173,7 +205,7 @@ public class WorldViewerUI extends Application {
 	 * Create a chart pane with all charts
 	 * @return
 	 */
-	public Pane newChartPane() {
+	public ScrollPane newChartPane() {
 		TilePane tile = new TilePane(); 
 		for (ChartViewer chart: charts) {
 			tile.getChildren().add(chart.getChart()); 
@@ -181,9 +213,9 @@ public class WorldViewerUI extends Application {
 		tile.setPadding(new Insets(5, 0, 5, 0));
 		tile.setVgap(4);
 		tile.setHgap(4);
-		tile.setPrefColumns(3);
+		tile.setPrefColumns(2);
 		tile.setStyle("-fx-background-color: DAE6F3;");
-		return tile;
+		return new ScrollPane(tile);
 	}
 	
 	/**

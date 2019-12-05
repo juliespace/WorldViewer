@@ -44,8 +44,8 @@ public class BubbleChartViewer extends ChartViewer {
 		double yMax = Collections.max(yMaxes);
 		double yMin = Collections.min(yMins);
 
-		final NumberAxis xAxis = new NumberAxis((int)xMin, (int)xMax, (int)(xMax - xMin) / 5);
-		final NumberAxis yAxis = new NumberAxis((int)yMin, (int)yMax, (int)(yMax - yMin) / 5);
+		final NumberAxis xAxis = new NumberAxis(xMin, xMax, (xMax - xMin) / 5);
+		final NumberAxis yAxis = new NumberAxis(yMin, yMax, (yMax - yMin) / 5);
 
 		final BubbleChart<Number, Number> bubbleChart = new BubbleChart<Number, Number>(xAxis, yAxis);
 		xAxis.setLabel(DataBank.getIndicatorMap().get(threeIndicators.get(0)));

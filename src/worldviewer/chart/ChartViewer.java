@@ -116,20 +116,20 @@ public abstract class ChartViewer {
 			if (eachData.getCountryCode().equals(countryCode)) {
 				if (eachData.getIndicatorCode().equals(threeIndicators.get(0))) {
 					x = eachData.getYearlyData()[year - 1960];
-					System.out.println(x);
+//					System.out.println("x: " + x);
 					
 				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(1))) {
 					y = eachData.getYearlyData()[year - 1960];
-					System.out.println(y);
+//					System.out.println("y: " + y);
 					
 				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(2))) {
-					z = eachData.getYearlyData()[year - 1960] / 100;
-					System.out.println(z);
+					z = eachData.getYearlyData()[year - 1960] * 100;
+//					System.out.println("z: " + z);
 				}
 			}
 		}
 
-//		System.out.printf("NN x: %s, y: %s\n", x, y);
+		System.out.printf("NN x: %e, y: %e, z: %e\n", x, y, z);
 
 		if (x > 0 && y > 0 && z > 0)
 			series.getData().add(new XYChart.Data<Number, Number>(x, y, z));
