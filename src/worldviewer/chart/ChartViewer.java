@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
@@ -51,9 +52,9 @@ public abstract class ChartViewer {
 	abstract public Chart newChart();
 
 	/**
-	 * This function is for creating a line series for a country 
-	 * The x_axis represents year of selection and the next 9 years from the year of selection. 
-	 * The y-axis represents the index for the one chosen indicator. 
+	 * This function is for creating a line series for a country The x_axis
+	 * represents year of selection and the next 9 years from the year of selection.
+	 * The y-axis represents the index for the one chosen indicator.
 	 * 
 	 * @param countryCode
 	 * @param year
@@ -63,25 +64,25 @@ public abstract class ChartViewer {
 	public Series<Number, Number> newLineSeries(String countryCode, int year) {
 		Series<Number, Number> series = new Series<Number, Number>();
 		series.setName(DataBank.getCountryMap().get(countryCode));
-		
-		CountryIndicatorData dataOfInterest = DataBank.getValidData().get(0); 
-		int x = 0;
-		
-		for (CountryIndicatorData eachData : DataBank.getValidData()) {
-			if (eachData.getCountryCode().equals(countryCode) && eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) {
-				dataOfInterest = eachData; 
-			
-				for (int i = 0; i < 10; i++) {
-					if ((year + i) > 2019) {
-						x = year + i - 2019 + 1959;
-					}
-					else {
-						x = year + i; 
-					}
-					
-					if (dataOfInterest.getYearlyData()[x - 1960] > 0)
-						series.getData().add(new XYChart.Data<Number, Number>(x, dataOfInterest.getYearlyData()[x - 1960])); 
 
+		CountryIndicatorData dataOfInterest = null;
+		int x = 0;
+
+//		System.out.println("idic2: " + DataBank.getListOfSelectedIndicators().get(0));
+		for (CountryIndicatorData eachData : DataBank.getValidData()) {
+
+			if (eachData.getCountryCode().equals(countryCode)
+					&& eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(0))) {
+				dataOfInterest = eachData;
+//				System.out.printf("country: %s, indicator: %s\n", eachData.getCountryCode(), eachData.getIndicatorCode());
+				for (int i = 0; i < 10; i++) {
+					x = (year + i) % 2019 + ((year + i) / 2019) * 1960;
+
+					if (dataOfInterest.getYearlyData()[x - 1960] > 0) {
+						double y = dataOfInterest.getYearlyData()[x - 1960];
+//						System.out.printf("x: %s, y: %s\n", x, y);
+						series.getData().add(new XYChart.Data<Number, Number>(x, y));
+					}
 				}
 				break;
 			}
@@ -104,25 +105,34 @@ public abstract class ChartViewer {
 		Series<Number, Number> series = new Series<Number, Number>();
 		series.setName(DataBank.getCountryMap().get(countryCode));
 
-		System.out.printf("country: %s, year: %s\n", countryCode, year);
+//		System.out.printf("NN country: %s, year: %s\n", countryCode, year);
 
 		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();
 		double x = 0;
 		double y = 0;
+		double z = 0;
 
 		for (CountryIndicatorData eachData : DataBank.getValidData()) {
 			if (eachData.getCountryCode().equals(countryCode)) {
-				if (eachData.getIndicatorCode().equals(threeIndicators.get(0)))
+				if (eachData.getIndicatorCode().equals(threeIndicators.get(0))) {
 					x = eachData.getYearlyData()[year - 1960];
-				else if (eachData.getIndicatorCode().equals(threeIndicators.get(1)))
+					System.out.println(x);
+					
+				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(1))) {
 					y = eachData.getYearlyData()[year - 1960];
+					System.out.println(y);
+					
+				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(2))) {
+					z = eachData.getYearlyData()[year - 1960] / 100;
+					System.out.println(z);
+				}
 			}
 		}
 
-		System.out.printf("x: %s, y: %s\n", x, y);
+//		System.out.printf("NN x: %s, y: %s\n", x, y);
 
-		if (x > 0 && y > 0)
-			series.getData().add(new XYChart.Data<Number, Number>(x, y, 1000000));
+		if (x > 0 && y > 0 && z > 0)
+			series.getData().add(new XYChart.Data<Number, Number>(x, y, z));
 
 		return series;
 	}
@@ -178,7 +188,10 @@ public abstract class ChartViewer {
 		}
 
 		getXYChart().getData().setAll(serieses);
-
+		NumberAxis xaxis = (NumberAxis) getXYChart().getXAxis();
+		xaxis.setLowerBound(year);
+		xaxis.setUpperBound(year + 9);
+		xaxis.setTickUnit(3);
 	}
 
 	/**
@@ -227,8 +240,7 @@ public abstract class ChartViewer {
 		}
 		((PieChart) chart).getData().setAll(groups);
 	}
-	
-	
+
 	/**
 	 * This method finds the greatest double in a double array
 	 * 

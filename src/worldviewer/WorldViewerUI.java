@@ -16,13 +16,13 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import worldviewer.chart.BarChartViewer;
 import worldviewer.chart.BubbleChartViewer;
 import worldviewer.chart.ChartViewer;
 import worldviewer.chart.LineChartViewer;
 import worldviewer.chart.PieChartViewer;
 import worldviewer.chart.ScatterChartViewer;
-import worldviewer.chart.BarChartViewer;
-import worldviewer.data.DataBank;
+
 
 /**
  * main ui container contains all charts views, stages, and next scene 

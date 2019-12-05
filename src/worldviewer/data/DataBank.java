@@ -6,7 +6,8 @@ import worldviewer.WorldViwerSelector;
 
 public class DataBank {
 	private static List<String> listOfSelectedCountries = Arrays.asList("ARB", "CSS", "CEB");
-	private static List<String> listOfSelectedIndicators = Arrays.asList("EN.ATM.CO2E.KT", "SP.POP.1564.MA.IN", "SP.DYN.CBRT.IN");
+	// third indicator need to be population in total: SP.POP.TOTL
+	private static List<String> listOfSelectedIndicators = Arrays.asList("EN.ATM.CO2E.KT", "SP.POP.1564.MA.IN", "SP.POP.TOTL");
 	private static List<String> listOfSelectedCharts = new ArrayList<String>();
 	private static WorldIndicatorReader reader = new WorldIndicatorReader("WDIDataSmall2.csv"); 
 	private static Map<String, String> countryMap = reader.listCountries(); 

@@ -6,7 +6,6 @@ import java.util.List;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import worldviewer.WorldViewerUI;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
@@ -17,26 +16,33 @@ public class LineChartViewer extends ChartViewer {
 		String indicatorOfInterest = DataBank.getListOfSelectedIndicators().get(0); 
 		List<Double> yMaxes = new ArrayList<Double>();
 		List<Double> yMins = new ArrayList<Double>();
-		
+//		System.out.println("idic1: " + DataBank.getListOfSelectedIndicators().get(0));
+	
 		for (CountryIndicatorData eachData : DataBank.getValidData()) {
 			if (eachData.getIndicatorCode().equals(indicatorOfInterest)) {
+
+//				System.out.printf("lineChart country: %s, indicator: %s\n", 
+//				eachData.getCountryCode(), eachData.getIndicatorCode());
+				
 				yMaxes.add(findMax(eachData.getYearlyData()));
 				yMins.add(findMin(eachData.getYearlyData()));
 			}
 		}
 		
-		double yMax = Collections.max(yMaxes);
+//		double yMedian = Collections.max(yMedians);
+		
 		double yMin = Collections.min(yMins);
+		double yMax = Collections.max(yMaxes); 
 		
-		//final NumberAxis xAxis = new NumberAxis(WorldViewerUI.getYear(), WorldViewerUI.getYear() + 9, 9);
-		final NumberAxis xAxis = new NumberAxis(1960, 2019, 59);
-		
-		final NumberAxis yAxis = new NumberAxis(yMin, yMax, yMax - yMin);
-		
+		final NumberAxis xAxis = new NumberAxis();
+		xAxis.setAutoRanging(false);
+		final NumberAxis yAxis = new NumberAxis((int)yMin, (int)yMax, (int)(yMax - yMin) / 5);		
         final LineChart<Number,Number> lineChart = 
                 new LineChart<Number,Number>(xAxis,yAxis);
                 
         lineChart.setTitle("Line Chart");
+        xAxis.setLabel("Year Range");
+        yAxis.setLabel(DataBank.getIndicatorMap().get(indicatorOfInterest));
         lineChart.setAnimated(false);
         return lineChart;
 		
@@ -44,10 +50,7 @@ public class LineChartViewer extends ChartViewer {
 
 	@Override
 	public void updateChart(int year) {
-		super.updateLineChart(year);
-		NumberAxis axis = (NumberAxis) super.getXYChart().getXAxis();
-		axis.setLowerBound(WorldViewerUI.getYear());
-		axis.setUpperBound(WorldViewerUI.getYear()+9);
+		updateLineChart(year);
 	}
 
 }
