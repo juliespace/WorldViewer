@@ -18,9 +18,15 @@ import worldviewer.data.DataBank;
  */
 public abstract class ChartViewer {
 	private final Chart chart;
+	private final ScaledAxis[] axises; 
 
 	ChartViewer() {
 		this.chart = newChart();
+		this.axises = newScaledAxis(); 
+	}
+
+	public ScaledAxis[] newScaledAxis() {
+		return new ScaledAxis[0];
 	}
 
 	/**
@@ -123,16 +129,19 @@ public abstract class ChartViewer {
 //					System.out.println("y: " + y);
 					
 				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(2))) {
-					z = eachData.getYearlyData()[year - 1960] * 100;
+					z = eachData.getYearlyData()[year - 1960];
 //					System.out.println("z: " + z);
 				}
 			}
 		}
 
-		System.out.printf("NN x: %e, y: %e, z: %e\n", x, y, z);
+//		System.out.printf("NN x: %e, y: %e, z: %e\n", x, y, z);
 
 		if (x > 0 && y > 0 && z > 0)
-			series.getData().add(new XYChart.Data<Number, Number>(x, y, z));
+			if (axises.length > 0)
+				series.getData().add(new XYChart.Data<Number, Number>(x / axises[0].getScale(), y / axises[1].getScale(), z / axises[2].getScale()));
+			else 
+				series.getData().add(new XYChart.Data<Number, Number>(x, y, z));
 
 		return series;
 	}
