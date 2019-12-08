@@ -56,6 +56,26 @@ public class ScatterChartViewer extends ChartViewer {
 
 	@Override
 	public void updateChart(int year) {
+		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();
+		List<Double> xMaxes = new ArrayList<Double>();
+		List<Double> xMins = new ArrayList<Double>();
+		List<Double> yMaxes = new ArrayList<Double>();
+		List<Double> yMins = new ArrayList<Double>();
+
+		for (CountryIndicatorData eachData : DataBank.getValidData()) {
+			if (eachData.getIndicatorCode().equals(threeIndicators.get(0))) {
+				xMaxes.add(findMax(eachData.getYearlyData()));
+				xMins.add(findMin(eachData.getYearlyData()));
+			} else if (eachData.getIndicatorCode().equals(threeIndicators.get(1))) {
+				yMaxes.add(findMax(eachData.getYearlyData()));
+				yMins.add(findMin(eachData.getYearlyData()));
+			}
+		}
+		double xMax = Collections.max(xMaxes);
+		double xMin = Collections.min(xMins);
+		double yMax = Collections.max(yMaxes);
+		double yMin = Collections.min(yMins);
+		
 		super.updateNNChart(year);
 	}
 }

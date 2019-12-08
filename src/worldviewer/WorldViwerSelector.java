@@ -24,17 +24,54 @@ import javafx.stage.Stage;
  */
 public class WorldViwerSelector {
 	
-	static List<String> listOfSelectedCountries = new ArrayList<String>(Arrays.asList("China"));
-	static List<String> listOfSelectedIndicators = new ArrayList<String>(Arrays.asList("Economy","Education"));
-	static List<String> listOfSelectedCharts = new ArrayList<String>(Arrays.asList("Pie Chart"));
+	static List<String> listOfSelectedCountries = new ArrayList<String>(Arrays.asList("ARB", "CHN", "EUU"));
+	static List<String> listOfSelectedIndicators = new ArrayList<String>(Arrays.asList("EN.ATM.CO2E.KT", "NY.GDP.MKTP.CD", "SP.POP.TOTL"));
+	static List<String> listOfSelectedCharts = new ArrayList<String>(Arrays.asList("Pie Chart",
+			"Scatter Chart", "Line Chart", "Bubble Chart", "Bar Chart"));
+	
+	static Map<String, String> country_code_map = new LinkedHashMap<String, String>() {
+		{
+			put("Arab World", "ARB");
+			put("Australia", "AUS");
+			put("Canada", "CAN");
+			put("China", "CHN");
+			put("Denmark", "DNK");
+			put("European Union", "EUU");
+			put("France", "FRA");
+			put("Germany", "DEU");
+			put("India", "IND");
+			put("Japan", "JPN");
+		}
+	};
+	
+	static Map<String, String> indicator_code_map = new LinkedHashMap<String, String>() {
+		{
+			put("CO2 emission", "EN.ATM.CO2E.KT");
+			put("GDP", "NY.GDP.MKTP.CD");
+			put("Population", "SP.POP.TOTL");
+			put("Urban population", "SP.URB.TOTL");
+			put("Rural population", "SP.RUR.TOTL");
+			put("Food production index", "AG.PRD.FOOD.XD");
+			put("Life expectancy", "SP.DYN.LE00.IN");
+			put("Birth rate", "SP.DYN.CBRT.IN");
+			put("Death rate", "SP.DYN.CDRT.IN");
+			put("Merchandise exports", "TX.VAL.MRCH.CD.WT");
+			put("Merchandise imports", "TM.VAL.MRCH.CD.WT");
+		}
+	};
 	
 	static Menu countryMenu = new Menu("Country");
 	static Menu indicatorMenu = new Menu("Indicator");
 	static Menu chartMenu = new Menu("Chart");
 	
-	static ArrayList<String> countryList = new ArrayList<String>(Arrays.asList("China","United States"));
-	static ArrayList<String> indicatorList = new ArrayList<String>(Arrays.asList("Economy","Education"));
-	static ArrayList<String> chartList = new ArrayList<String>(Arrays.asList("Pie Chart","Scatter Chart"));
+	static ArrayList<String> countryList = new ArrayList<String>(Arrays.asList("Arab World",
+			"Australia", "Canada", "China" ,"Denmark", "European Union", "France", "Germany",
+			"India", "Japan"));
+	static ArrayList<String> indicatorList = new ArrayList<String>(Arrays.asList("CO2 emission", "GDP", "Population", "Urban population",
+			"Rural population", "Food production index", "Life expectancy", "Birth rate",
+			"Death rate", "Merchandise exports", "Merchandise imports"));
+	static ArrayList<String> chartList = new ArrayList<String>(Arrays.asList("Pie Chart",
+			"Scatter Chart", "Line Chart", "Bubble Chart", "Bar Chart"));
 
 	static HashMap<String, CheckBox> country_checkbox_map = new HashMap<String, CheckBox>();
 	static HashMap<String, CheckBox> indicator_checkbox_map = new HashMap<String, CheckBox>();
@@ -51,7 +88,7 @@ public class WorldViwerSelector {
 		listOfSelectedCountries.clear();
 		for (Map.Entry<String,CheckBox> entry : country_checkbox_map.entrySet()) { 
             if (entry.getValue().isSelected()) {
-            	listOfSelectedCountries.add(entry.getKey());
+            	listOfSelectedCountries.add(country_code_map.get(entry.getKey()));
             }
 		}
 		printStatus();
@@ -61,7 +98,7 @@ public class WorldViwerSelector {
 		listOfSelectedIndicators.clear();
 		for (Map.Entry<String,CheckBox> entry : indicator_checkbox_map.entrySet()) { 
             if (entry.getValue().isSelected()) {
-            	listOfSelectedIndicators.add(entry.getKey());
+            	listOfSelectedIndicators.add(indicator_code_map.get(entry.getKey()));
             }
 		}
 		printStatus();
@@ -123,7 +160,7 @@ public class WorldViwerSelector {
 				}
 	    	};
 	    	countryCheckBox.setOnAction(handler);
-	    	if (listOfSelectedCountries.contains(countryName))
+	    	if (listOfSelectedCountries.contains(country_code_map.get(countryName)))
 	    		countryCheckBox.setSelected(true);
 			countryMenuItem.setHideOnClick(false);
 		}
@@ -148,7 +185,7 @@ public class WorldViwerSelector {
 				}
 	    	};
 	    	indicatorCheckBox.setOnAction(handler);
-	    	if (listOfSelectedIndicators.contains(indicatorName))
+	    	if (listOfSelectedIndicators.contains(indicator_code_map.get(indicatorName)))
 	    		indicatorCheckBox.setSelected(true);
 			indicatorMenuItem.setHideOnClick(false);
 		}

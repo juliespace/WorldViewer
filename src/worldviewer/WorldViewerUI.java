@@ -26,6 +26,7 @@ import worldviewer.chart.ChartViewer;
 import worldviewer.chart.LineChartViewer;
 import worldviewer.chart.PieChartViewer;
 import worldviewer.chart.ScatterChartViewer;
+import worldviewer.data.DataBank;
 
 
 /**
@@ -95,6 +96,11 @@ public class WorldViewerUI extends Application {
     	} else {
     		playButton.setText("Stop");
     	}
+    	DataBank.getListOfSelectedCountries().clear();
+    	DataBank.getListOfSelectedCountries().addAll(WorldViwerSelector.selectedCountries());
+    	DataBank.getListOfSelectedIndicators().clear();
+    	DataBank.getListOfSelectedIndicators().addAll(WorldViwerSelector.selectedIndicators());
+    	DataBank.updateValidData();
     }
     
     
