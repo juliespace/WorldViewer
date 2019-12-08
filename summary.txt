@@ -1,0 +1,34 @@
+Team 36 Final Project
+
+Project Name: World Viewer
+
+Project Member: Hui Zhu, Qing Jin
+
+Project Descroption: In this final project, we intend to visualize various development indicators 
+for different countries to show their change over time, and the main purpose is to help people 
+understand the development more intuitively and identify development patterns and relations.
+
+Work Breakdown:
+
+Hui Zhu:
+(1) CountryIndicatorData.java
+(2) DataBank.java
+(3) WorldIndicatorReader.java
+(4) WorldViewerUI.java
+(5) ChartViewer.java
+(6) BubbleChartViewer.java
+(7) LineChartViewer.java
+(8) ScaledAxis.java
+
+
+Qing Jin:
+(1) WorldViewerSelector.java
+(2) BarChartViewer.java
+(3) ScatterChartViewer.java
+(4) PieChartViewer.java
+(5) CountryIndicatorDataTest.java
+(6) DataBankTest.java
+(7) WorldIndicatorReaderTest.java
+
+
+Github Link: https://github.com/UPenn-CIT599/final-project-team36_worldviewer.git
