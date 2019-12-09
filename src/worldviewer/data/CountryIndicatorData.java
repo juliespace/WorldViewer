@@ -6,7 +6,7 @@ import java.util.Arrays;
  * 
  * yearly data for a given country / indicator
  * 
- * @author huizhu, qingjin
+ * @author huizhu
  *
  */
 public class CountryIndicatorData {
@@ -65,6 +65,9 @@ public class CountryIndicatorData {
 		return yearlyData;
 	}
 
+	/**
+	 * to string for print 
+	 */
 	@Override
 	public String toString() {
 		return "CountryIndicatorData [countryName=" + countryName + ", countryCode=" + countryCode + ", indicatorName="

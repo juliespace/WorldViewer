@@ -28,7 +28,15 @@ public class ScaledAxis {
 			label = String.format("%s (x%s)", label, scale); 
 		axis.setLabel(label);
 	}
-
+	
+	/**
+	 * find scale 
+	 * 
+	 * @param min
+	 * @param max
+	 * @param displayMax
+	 * @return
+	 */
 	public long findScale(double min, double max, int displayMax) {
 		long scale; 
 		
@@ -40,10 +48,20 @@ public class ScaledAxis {
 		return scale;
 	}
 
+	/**
+	 * get axis 
+	 * 
+	 * @return
+	 */
 	public NumberAxis getAxis() {
 		return axis;
 	}
 
+	
+	/**
+	 * get scale 
+	 * @return
+	 */
 	public long getScale() {
 		return scale;
 	}

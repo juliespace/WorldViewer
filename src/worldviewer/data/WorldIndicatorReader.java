@@ -7,7 +7,7 @@ import java.util.*;
  * 
  * to read country indicator data
  * 
- * @author huizhu, qingjin
+ * @author huizhu
  *
  */
 public class WorldIndicatorReader {

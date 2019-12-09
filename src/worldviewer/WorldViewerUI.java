@@ -1,5 +1,8 @@
 package worldviewer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -7,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import worldviewer.chart.BarChartViewer;
@@ -39,11 +44,16 @@ public class WorldViewerUI extends Application {
 	private final MenuBar menuBar = WorldViwerSelector.getMenuBar();
 	private final Slider slider = newSlider();
 	private final Button playButton = newPlayButton();
-	private final ChartViewer[] charts = {new BubbleChartViewer(), new LineChartViewer(), new PieChartViewer(), new BarChartViewer(), new ScatterChartViewer()};
+	private List<ChartViewer> charts = newChartViewers();
 	private static int year; 
+	private final Label note = newNote(); 
 	private final Label yearLabel = newLabel(); 
-	private final Label titleLabel = newLabel(); 
-	
+	private final Label titleLabel = newLabel();
+	private Stage stage;
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+    double width = primaryScreenBounds.getWidth() * 0.9;
+    double height = primaryScreenBounds.getHeight() * 0.9;
+    
 	/**
 	 * Create a new slider
 	 * @return
@@ -59,10 +69,61 @@ public class WorldViewerUI extends Application {
     	return slider; 
    	}
     
+    /**
+     * 
+     * new chart viewers
+     * 
+     * @return
+     */
+    List<ChartViewer> newChartViewers() {
+    	List<ChartViewer> viewers = new ArrayList<>();
+    	for (String c : WorldViwerSelector.selectedCharts()) {
+    		switch (c) {
+    		case "Pie Chart":
+    			viewers.add(new PieChartViewer());
+    			break;
+    		case "Scatter Chart":
+    			viewers.add(new ScatterChartViewer());
+    			break;
+    		case "Line Chart":
+    			viewers.add(new LineChartViewer());
+    			break;
+    		case "Bubble Chart":
+    			viewers.add(new BubbleChartViewer());
+    			break;
+    		case "Bar Chart":
+    			viewers.add(new BarChartViewer());
+    			break;
+    		}
+    	}
+    	return viewers;
+    }
+    
+    /**
+     * 
+     * refresh stage for selection changes
+     * 
+     */
+    void refreshStage() {
+    	charts = newChartViewers();
+        stage.setScene(newScene());
+    }
+    
+    
+    /**
+     * create new note
+     * 
+     * @return
+     */
+    public Label newNote() {
+    	Label label = new Label("Note: select up to 2 indicators");
+    	label.setAlignment(Pos.CENTER_LEFT);
+    	return label;
+    }
     
     public Label newLabel() {
     	Label yearLabel = new Label();
-    	yearLabel.setFont(Font.font("American Typewriter", 16));
+    	yearLabel.setFont(Font.font("American Typewriter", 40));
     	
     	return yearLabel;
 	}
@@ -95,12 +156,13 @@ public class WorldViewerUI extends Application {
     		playButton.setText("Play");
     	} else {
     		playButton.setText("Stop");
+        	DataBank.getListOfSelectedCountries().clear();
+        	DataBank.getListOfSelectedCountries().addAll(WorldViwerSelector.selectedCountries());
+        	DataBank.getListOfSelectedIndicators().clear();
+        	DataBank.getListOfSelectedIndicators().addAll(WorldViwerSelector.selectedIndicators());
+        	DataBank.updateValidData();
+    		refreshStage();
     	}
-    	DataBank.getListOfSelectedCountries().clear();
-    	DataBank.getListOfSelectedCountries().addAll(WorldViwerSelector.selectedCountries());
-    	DataBank.getListOfSelectedIndicators().clear();
-    	DataBank.getListOfSelectedIndicators().addAll(WorldViwerSelector.selectedIndicators());
-    	DataBank.updateValidData();
     }
     
     
@@ -118,8 +180,11 @@ public class WorldViewerUI extends Application {
      */
 	@Override 
     public void start(Stage stage) {
+        this.stage = stage;
         stage.setTitle("World Indicator Viewer");
-        newTimeline().play(); 
+        newTimeline().play();
+        stage.setWidth(width);
+        stage.setHeight(height);
         stage.setScene(newScene());
         stage.show();
     }
@@ -157,7 +222,7 @@ public class WorldViewerUI extends Application {
 			if (year > 2019) 
 				year = 1960; 
 			slider.setValue(year);
-			yearLabel.setText("Now shows the year of " +Integer.toString(year));
+			yearLabel.setText("Year " +Integer.toString(year));
 //			System.out.println("year: " + year);
 			for (ChartViewer eachChartViewer: charts) {
 				eachChartViewer.updateChart(year); 
@@ -166,6 +231,12 @@ public class WorldViewerUI extends Application {
 	}
 	
 	
+	/**
+	 * 
+	 * get year
+	 * 
+	 * @return
+	 */
 	public static int getYear() {
 		return year;
 	}
@@ -195,13 +266,15 @@ public class WorldViewerUI extends Application {
 	 * @return
 	 */
 	public Pane newControlPane() {
+		Label space0 = new Label(); 
+		space0.setPrefWidth(30);
 		Label space1 = new Label(); 
 		space1.setPrefWidth(30);
 		Label space2 = new Label(); 
 		space2.setPrefWidth(80);
 		Label space3 = new Label(); 
 		space3.setPrefWidth(80);
-		HBox newBox = new HBox(menuBar,space3, slider, space1, playButton, space2, yearLabel); 
+		HBox newBox = new HBox(note, space0, menuBar,space1, yearLabel, space2, slider, space3, playButton); 
 		newBox.setAlignment(Pos.CENTER);
 		return newBox;
 	}
@@ -219,8 +292,10 @@ public class WorldViewerUI extends Application {
 		tile.setPadding(new Insets(5, 0, 5, 0));
 		tile.setVgap(4);
 		tile.setHgap(4);
-		tile.setPrefColumns(2);
+		tile.setPrefColumns(3);
 		tile.setStyle("-fx-background-color: DAE6F3;");
+		tile.setPrefWidth(width);
+		tile.setPrefHeight(height);
 		return new ScrollPane(tile);
 	}
 	

@@ -12,6 +12,7 @@ import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
 /**
+ * chart viewer parent class 
  * 
  * @author huizhu
  *
@@ -128,14 +129,14 @@ public abstract class ChartViewer {
 					y = eachData.getYearlyData()[year - 1960];
 //					System.out.println("y: " + y);
 					
-				} else if (eachData.getIndicatorCode().equals(threeIndicators.get(2))) {
+				}
+				if (eachData.getIndicatorCode().equals(DataBank.POPULATION)) {
 					z = eachData.getYearlyData()[year - 1960];
-//					System.out.println("z: " + z);
 				}
 			}
 		}
 
-//		System.out.printf("NN x: %e, y: %e, z: %e\n", x, y, z);
+//		System.out.printf("NN x: %s, y: %s, z: %s\n", x, y, z);
 
 		if (x > 0 && y > 0 && z > 0)
 			if (axises.length > 0)

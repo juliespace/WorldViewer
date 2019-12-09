@@ -9,8 +9,19 @@ import javafx.scene.chart.NumberAxis;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
+/**
+ * line chart viewer 
+ * 
+ * @author huizhu
+ *
+ */
 public class LineChartViewer extends ChartViewer {
 
+	/**
+	 * 
+	 * new chart
+	 * 
+	 */
 	@Override
 	public LineChart<Number, Number> newChart() {
 		String indicatorOfInterest = DataBank.getListOfSelectedIndicators().get(0); 
@@ -48,6 +59,11 @@ public class LineChartViewer extends ChartViewer {
 		
 	}
 
+	/**
+	 * 
+	 * update chart
+	 * 
+	 */
 	@Override
 	public void updateChart(int year) {
 		updateLineChart(year);

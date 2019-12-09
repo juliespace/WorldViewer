@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.CategoryAxis;
-import worldviewer.WorldViewerUI;
+import javafx.scene.chart.NumberAxis;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
 /**
  * bar chart viewer
- * @author huizhu
+ * @author qingjin
  *
  */
 public class BarChartViewer extends ChartViewer {
@@ -36,7 +34,8 @@ public class BarChartViewer extends ChartViewer {
 		
 		final CategoryAxis xAxis = new CategoryAxis();
 		xAxis.setLabel("Country");
-		final NumberAxis yAxis = new NumberAxis(yMin, yMax, yMax - yMin);
+		final NumberAxis yAxis = new NumberAxis(yMin, yMax, (yMax - yMin) / 5);
+		yAxis.setLabel(DataBank.getIndicatorMap().get(DataBank.getListOfSelectedIndicators().get(0)));
 		
         final BarChart<String, Number> barChart = 
                 new BarChart<String, Number>(xAxis,yAxis);
@@ -47,6 +46,11 @@ public class BarChartViewer extends ChartViewer {
 		
 	}
 
+	/**
+	 * 
+	 * update chart 
+	 * 
+	 */
 	@Override
 	public void updateChart(int year) {
 		super.updateSNChart(year);

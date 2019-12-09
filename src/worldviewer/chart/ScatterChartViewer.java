@@ -14,10 +14,14 @@ import worldviewer.data.DataBank;
 
 /**
  * scatter chart viewer
- * @author huizhu
+ * @author qingjin
  *
  */
 public class ScatterChartViewer extends ChartViewer {
+	
+	/**
+	 * new chart 
+	 */
 	@Override
 	public ScatterChart<Number, Number> newChart() {
 		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();
@@ -54,6 +58,9 @@ public class ScatterChartViewer extends ChartViewer {
 		
 	}
 
+	/**
+	 * update chart
+	 */
 	@Override
 	public void updateChart(int year) {
 		List<String> threeIndicators = DataBank.getListOfSelectedIndicators();

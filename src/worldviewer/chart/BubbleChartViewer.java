@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javafx.scene.chart.BubbleChart;
-import javafx.scene.chart.NumberAxis;
 import worldviewer.data.CountryIndicatorData;
 import worldviewer.data.DataBank;
 
@@ -17,6 +16,11 @@ import worldviewer.data.DataBank;
  */
 public class BubbleChartViewer extends ChartViewer {
 
+	/**
+	 * 
+	 * new scaled axis
+	 * 
+	 */
 	@Override 
 	public ScaledAxis[] newScaledAxis() {
 		
@@ -27,7 +31,8 @@ public class BubbleChartViewer extends ChartViewer {
 			List<Double> mins = new ArrayList<Double>();
 			
 			for (CountryIndicatorData eachData : DataBank.getValidData()) {
-				if (eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(i))) {
+				if (i < 2 && eachData.getIndicatorCode().equals(DataBank.getListOfSelectedIndicators().get(i)) ||
+					i == 2 && eachData.getIndicatorCode().equals(DataBank.POPULATION)) {
 					maxes.add(findMax(eachData.getYearlyData()));
 					mins.add(findMin(eachData.getYearlyData()));
 				}
@@ -35,6 +40,8 @@ public class BubbleChartViewer extends ChartViewer {
 			double max = Collections.max(maxes);
 			double min = Collections.min(mins);
 		
+			System.out.printf("i: %s, min: %s, max: %s\n", i, min, max);
+			
 			if (i < 2) 
 				axises[i] = new ScaledAxis(min, max, DataBank.getIndicatorMap().get(DataBank.getListOfSelectedIndicators().get(i))); 
 			else
@@ -57,8 +64,8 @@ public class BubbleChartViewer extends ChartViewer {
 		
 		final BubbleChart<Number, Number> bubbleChart = new BubbleChart<Number, Number>(axises[0].getAxis(), axises[1].getAxis());
 		
-		String thirdIndicator = String.format("%s (x%s)", DataBank.getIndicatorMap().get(DataBank.getListOfSelectedIndicators().get(2)), axises[2].getScale());
-		bubbleChart.setTitle("Bubble Chart: Size of Bubble represents " + thirdIndicator);
+		String thirdIndicator = DataBank.getIndicatorMap().get(DataBank.POPULATION);
+		bubbleChart.setTitle("Bubble Size: " + thirdIndicator);
 		bubbleChart.setAnimated(false);
 
 		return bubbleChart;
